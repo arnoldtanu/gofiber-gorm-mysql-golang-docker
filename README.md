@@ -22,7 +22,14 @@ docker-compose up --build
 
 ##### 5. Send JSON payload
 - Submit JSON payload to localhost:3000/disbursement
-
+- example:
+```
+{
+    "id":2,
+    "amount":1000,
+    "passkey":"secret"
+}
+```
 
 ## Build With
 - [Go-lang](https://go.dev/)
