@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  db-disbursement:
+    build: ./db
+    container_name: db-disbursement
+    env_file:
+      - .env
+    restart: always
+  go-app:
+    build: .
+    container_name: go-app
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: db-disbursement
+    depends_on:
+      - db-disbursement
+    ports:
+    - 3000:3000
+    volumes:
+    - .:/app
+    command: go run src/main.go -b 0.0.0.0
+    restart: on-failure
