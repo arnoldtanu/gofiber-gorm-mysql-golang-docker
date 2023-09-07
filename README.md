@@ -15,7 +15,7 @@ This app can be run through docker, here is how to run it:
 - run command inside terminal / cmd:
 
 ```
-docker-compose up --build
+docker compose up --build
 ```
 - Docker compose will download and build necesary image (golang and mysql).
 
