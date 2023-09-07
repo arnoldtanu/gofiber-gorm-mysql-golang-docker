@@ -1,32 +1,35 @@
 package services
 
 import (
+	"errors"
+
+	"github.com/arnoldtanu/disbursement-api/src/models"
 	"github.com/arnoldtanu/disbursement-api/src/repositories"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func DoDisbursement(userid, amount int, passkey string) (string, error) {
-	user, errorGetUser := repositories.GetUserBalanceAndPasskey(userid);
+func DoDisbursement(userid, amount int, passkey string) (*models.Users, error) {
+	user, err := repositories.GetUserBalanceAndPasskey(userid);
 
-	if errorGetUser!=nil{
-		return "user not found", nil;
+	if err!=nil{
+		return &user, errors.New(err.Error());
 	}
 
 	match := CheckPasswordHash(passkey, user.Passkey)
 	if !match {
-		return "wrong passkey",nil;
+		return &user, errors.New("wrong passkey");
 	}
 
 	if user.Balance < amount {
-		return "insufficient balance",nil;
+		return &user, errors.New("insufficient balance");
 	}
 
 	user.Balance = user.Balance - amount;
 	if errorUpdateUserBalance := repositories.UpdateUserBalance(&user); errorUpdateUserBalance!=nil{
-		return errorUpdateUserBalance.Error(), nil
+		return &user, errors.New(errorUpdateUserBalance.Error())
 	}
 
-	return "",nil;
+	return &user,nil;
 }
 
 func CheckPasswordHash(password, hash string) bool {

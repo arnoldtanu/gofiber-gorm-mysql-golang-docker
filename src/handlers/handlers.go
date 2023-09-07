@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"strconv"
+
 	"github.com/arnoldtanu/disbursement-api/src/services"
 	"github.com/gofiber/fiber/v2"
 )
@@ -36,16 +38,16 @@ func Disbursement(c *fiber.Ctx) error {
 		});
 	}
 
-	result, _ := services.DoDisbursement(disbursementParams.ID, disbursementParams.Amount, disbursementParams.Passkey);
-	if len(result)>0 {
+	user, err := services.DoDisbursement(disbursementParams.ID, disbursementParams.Amount, disbursementParams.Passkey);
+	if err!=nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status": "failed",
-			"message": result,
+			"message": err.Error(),
 		});
 	} else {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"status": "success",
-			"message": "successful disbursement",
+			"message": "successful disbursement, updated balance : "+ strconv.Itoa(user.Balance),
 		});
 	}
 }
