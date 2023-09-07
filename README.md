@@ -10,7 +10,9 @@ This app can be run through docker, here is how to run it:
 - Download docker desktop from https://www.docker.com/products/docker-desktop/ and install it.
 
 ##### 3. Build and run from docker
-- Enter project's root folder, and run command inside terminal / cmd:
+- Enter project's root folder
+- Rename `backup.env` to `.env`
+- run command inside terminal / cmd:
 
 ```
 docker-compose up --build
