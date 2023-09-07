@@ -12,21 +12,21 @@ func DoDisbursement(userid, amount int, passkey string) (*models.Users, error) {
 	user, err := repositories.GetUserBalanceAndPasskey(userid);
 
 	if err!=nil{
-		return &user, errors.New(err.Error());
+		return nil, errors.New(err.Error());
 	}
 
 	match := CheckPasswordHash(passkey, user.Passkey)
 	if !match {
-		return &user, errors.New("wrong passkey");
+		return nil, errors.New("wrong passkey");
 	}
 
 	if user.Balance < amount {
-		return &user, errors.New("insufficient balance");
+		return nil, errors.New("insufficient balance");
 	}
 
 	user.Balance = user.Balance - amount;
 	if errorUpdateUserBalance := repositories.UpdateUserBalance(&user); errorUpdateUserBalance!=nil{
-		return &user, errors.New(errorUpdateUserBalance.Error())
+		return nil, errors.New(errorUpdateUserBalance.Error())
 	}
 
 	return &user,nil;
