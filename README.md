@@ -21,7 +21,7 @@ docker-compose up --build
 - wait until mysql and go are ready to use which is indicated by the appearance of a message from fiber
 
 ##### 5. Send JSON payload
-- Submit JSON payload to localhost:3000/disbursement
+- Submit JSON payload to `localhost:3000/disbursement`
 - example:
 ```
 {
